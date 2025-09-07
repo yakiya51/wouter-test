@@ -1,11 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../context";
 import { useLocation } from "wouter";
 
 function LoginPage() {
-  const { login } = useAuth();
+  const { session, login } = useAuth();
+
   const [name, setName] = useState("");
   const [_, setLocation] = useLocation();
+
+  useEffect(() => {
+    if (session !== null) {
+      setLocation("/");
+    }
+  }, [session]);
+
   return (
     <main>
       <form
@@ -13,7 +21,7 @@ function LoginPage() {
         onSubmit={(e) => {
           e.preventDefault();
           login(name);
-          setLocation("/protected");
+          setLocation("/");
         }}
       >
         <input type="text" required onChange={(e) => setName(e.target.value)} />

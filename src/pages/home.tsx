@@ -1,7 +1,7 @@
 import { useLocation } from "wouter";
 import { useAuthRequired } from "../context";
 
-export function ProtectedPage() {
+export function HomePage() {
   const { session, logout } = useAuthRequired();
   const [_, setLocation] = useLocation();
 

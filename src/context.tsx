@@ -1,6 +1,7 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type PropsWithChildren,
 } from "react";
@@ -45,11 +46,18 @@ export function useAuth(): UseAuthReturn {
 }
 
 export function useAuthRequired(): UseAuthRequiredReturn {
+  console.log("useAuthRequired");
   const [location, setLocation] = useLocation();
   const auth = useAuth();
 
-  if (auth.session === null) {
-    setLocation(`/login?redirect=${encodeURIComponent(location)}`);
+  useEffect(() => {
+    if (auth.session === null && location !== "/login") {
+      console.log("going to /login");
+      setLocation(`/login`);
+    }
+  }, [auth, location]);
+
+  if (!auth.session) {
     return { ...auth, session: { id: "" } };
   }
 
